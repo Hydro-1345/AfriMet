@@ -6,6 +6,7 @@ import { fetchMealAnalysis } from "@/lib/analysis/queries";
 import { analyzeMealInputSchema } from "@/lib/analysis/schemas";
 import { fetchMealById } from "@/lib/meals/queries";
 import { createClient } from "@/lib/supabase/server";
+import { ensureMetabolicAssessment } from "@/services/metabolic.service";
 import type { AnalysisActionResult } from "@/types/analysis";
 
 async function requireAuthenticatedUserId(): Promise<string | null> {
@@ -178,6 +179,10 @@ export async function analyzeMealAction(
   revalidatePath(`/meals/${parsed.data.mealId}/analysis`);
   revalidatePath("/meals");
   revalidatePath("/dashboard");
+
+  if (analysis?.status === "completed" && analysis.nutrition) {
+    await ensureMetabolicAssessment(userId, parsed.data.mealId, { force: true });
+  }
 
   return {
     success: true,

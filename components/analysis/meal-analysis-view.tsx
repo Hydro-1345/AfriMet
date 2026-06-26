@@ -4,16 +4,26 @@ import { AnalysisSummaryCard } from "@/components/analysis/analysis-summary-card
 import { AnalyzeMealPanel } from "@/components/analysis/analyze-meal-panel";
 import { DetectedFoodsList } from "@/components/analysis/detected-foods-list";
 import { NutritionSummary } from "@/components/analysis/nutrition-summary";
+import { MetabolicInsightsSection } from "@/components/metabolic/metabolic-insights-section";
 import type { Meal } from "@/types/meal";
 import type { MealAnalysis } from "@/types/analysis";
+import type { MetabolicAssessment } from "@/types/metabolic";
 
 interface MealAnalysisViewProps {
   meal: Meal;
   analysis: MealAnalysis | null;
   autoStart?: boolean;
+  metabolicAssessment?: MetabolicAssessment | null;
+  metabolicError?: string | null;
 }
 
-export function MealAnalysisView({ meal, analysis, autoStart = false }: MealAnalysisViewProps) {
+export function MealAnalysisView({
+  meal,
+  analysis,
+  autoStart = false,
+  metabolicAssessment = null,
+  metabolicError = null,
+}: MealAnalysisViewProps) {
   const hasDescription = meal.description.trim().length > 0;
   const hasImage = Boolean(meal.imageUrl);
 
@@ -45,6 +55,12 @@ export function MealAnalysisView({ meal, analysis, autoStart = false }: MealAnal
           {analysis.nutrition ? (
             <NutritionSummary nutrition={analysis.nutrition} />
           ) : null}
+          <MetabolicInsightsSection
+            canGenerate={Boolean(analysis.nutrition)}
+            errorMessage={metabolicError}
+            initialAssessment={metabolicAssessment}
+            mealId={meal.id}
+          />
         </>
       ) : analysis?.status !== "failed" ? (
         <AnalysisPendingState />

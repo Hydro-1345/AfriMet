@@ -6,11 +6,13 @@ import { notFound, redirect } from "next/navigation";
 import { DeleteMealButton } from "@/components/meals/delete-meal-button";
 import { PageContainer } from "@/components/layout/page-container";
 import { fetchMealAnalysis } from "@/lib/analysis/queries";
+import { getGlycemicImpactLabel, getSatietyEstimateLabel } from "@/lib/metabolic/queries";
 import { formatMealDate, hasMealImage } from "@/lib/meals/format";
 import { fetchMealById } from "@/lib/meals/queries";
 import { isProfileComplete } from "@/lib/profile/completion";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
+import { getMetabolicAssessmentForMeal } from "@/services/metabolic.service";
 import { Button } from "@/components/ui/button";
 
 interface MealDetailPageProps {
@@ -51,6 +53,10 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
   }
 
   const analysis = await fetchMealAnalysis(supabase, user.id, id);
+  const metabolicAssessment =
+    analysis?.status === "completed" && analysis.nutrition
+      ? await getMetabolicAssessmentForMeal(user.id, id)
+      : null;
 
   return (
     <PageContainer className="max-w-2xl py-6 sm:py-8">
@@ -95,12 +101,18 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
 
         {analysis?.status === "completed" && analysis.nutrition ? (
           <section className="rounded-xl border border-border/60 bg-card p-5 shadow-sm sm:p-6">
-            <h2 className="text-lg font-semibold text-foreground">Nutrition estimate</h2>
+            <h2 className="text-lg font-semibold text-foreground">Nutrition & metabolic insights</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               {Math.round(analysis.nutrition.calories)} kcal ·{" "}
               {Math.round(analysis.nutrition.protein)} g protein ·{" "}
               {Math.round(analysis.nutrition.carbs)} g carbs
             </p>
+            {metabolicAssessment ? (
+              <p className="mt-2 text-sm text-muted-foreground">
+                {getGlycemicImpactLabel(metabolicAssessment.score.glycemicImpact)} ·{" "}
+                {getSatietyEstimateLabel(metabolicAssessment.score.satietyEstimate)}
+              </p>
+            ) : null}
             <div className="mt-4">
               <Button asChild variant="outline">
                 <Link href={`/meals/${meal.id}/analysis`}>View full analysis</Link>

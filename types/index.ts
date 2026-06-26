@@ -34,3 +34,10 @@ export type {
   MealComponent,
   NutritionRecord,
 } from "@/types/analysis";
+
+export type {
+  MetabolicActionResult,
+  MetabolicAssessment,
+  HealthInsight,
+  MetabolicScore,
+} from "@/types/metabolic";

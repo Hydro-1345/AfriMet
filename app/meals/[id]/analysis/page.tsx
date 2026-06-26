@@ -11,6 +11,7 @@ import { fetchMealById } from "@/lib/meals/queries";
 import { isProfileComplete } from "@/lib/profile/completion";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
+import { ensureMetabolicAssessment } from "@/services/metabolic.service";
 import { Button } from "@/components/ui/button";
 
 interface MealAnalysisPageProps {
@@ -66,6 +67,19 @@ export default async function MealAnalysisPage({
 
   const analysis = await fetchMealAnalysis(supabase, user.id, id);
 
+  let metabolicAssessment = null;
+  let metabolicError: string | null = null;
+
+  if (analysis?.status === "completed" && analysis.nutrition) {
+    const metabolicResult = await ensureMetabolicAssessment(user.id, id);
+
+    if (metabolicResult.error) {
+      metabolicError = metabolicResult.error;
+    } else {
+      metabolicAssessment = metabolicResult.assessment ?? null;
+    }
+  }
+
   return (
     <PageContainer className="max-w-2xl py-6 sm:py-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -110,6 +124,8 @@ export default async function MealAnalysisPage({
         analysis={analysis}
         autoStart={shouldAutoStart && analysis?.status !== "completed"}
         meal={meal}
+        metabolicAssessment={metabolicAssessment}
+        metabolicError={metabolicError}
       />
     </PageContainer>
   );
