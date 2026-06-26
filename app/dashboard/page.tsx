@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { PageContainer } from "@/components/layout/page-container";
 import { SprintNotice } from "@/components/layout/sprint-notice";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -41,7 +42,15 @@ const placeholderCards = [
   },
 ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const displayName =
+    (user?.user_metadata?.name as string | undefined) ?? user?.email ?? "there";
+
   return (
     <PageContainer className="py-6 sm:py-8">
       <div className="flex items-center gap-3">
@@ -53,16 +62,16 @@ export default function DashboardPage() {
             Dashboard
           </h1>
           <p className="text-sm text-muted-foreground sm:text-base">
-            Your daily health summary
+            Welcome back, {displayName}
           </p>
         </div>
       </div>
 
       <SprintNotice
         className="mt-5"
-        description="This page is a preview. Meal tracking and analytics will be added in later releases."
-        sprint="Preview"
-        title="Dashboard not yet active"
+        description="Meal tracking and analytics will be added in later releases. Your account is active and ready."
+        sprint="Coming soon"
+        title="Dashboard preview"
       />
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

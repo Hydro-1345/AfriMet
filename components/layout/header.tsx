@@ -14,7 +14,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-export function MobileNav() {
+interface HeaderProps {
+  isAuthenticated: boolean;
+}
+
+function MobileNav({ isAuthenticated }: HeaderProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,6 +36,7 @@ export function MobileNav() {
           </SheetHeader>
           <SiteNav
             className="mt-6 flex-col items-stretch gap-1"
+            isAuthenticated={isAuthenticated}
             onNavigate={() => setOpen(false)}
           />
         </SheetContent>
@@ -40,7 +45,7 @@ export function MobileNav() {
   );
 }
 
-export function Header() {
+export function Header({ isAuthenticated }: HeaderProps) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -58,11 +63,11 @@ export function Header() {
         </Link>
 
         <div className="hidden items-center gap-2 md:flex">
-          <SiteNav />
+          <SiteNav isAuthenticated={isAuthenticated} />
           <ThemeToggle />
         </div>
 
-        <MobileNav />
+        <MobileNav isAuthenticated={isAuthenticated} />
       </div>
     </header>
   );

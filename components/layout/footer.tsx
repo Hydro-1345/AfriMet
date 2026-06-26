@@ -1,8 +1,14 @@
 import Link from "next/link";
-import { navLinks } from "@/components/layout/site-nav";
+import { getNavLinks } from "@/lib/auth/routes";
+import { createClient } from "@/lib/supabase/server";
 
-export function Footer() {
+export async function Footer() {
   const currentYear = new Date().getFullYear();
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const navLinks = getNavLinks(!!user);
 
   return (
     <footer className="mt-auto border-t border-border/60 bg-muted/30">
