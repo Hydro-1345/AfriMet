@@ -1,6 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { AUTH_ROUTES, isProtectedRoute } from "@/lib/auth/routes";
+import {
+  AUTH_ROUTES,
+  ONBOARDING_ROUTE,
+  isAuthCallbackRoute,
+  isProtectedRoute,
+} from "@/lib/auth/routes";
+import { fetchProfileCompletionStatus } from "@/lib/profile/queries";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -47,6 +53,27 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
+  }
+
+  if (user && !isAuthCallbackRoute(pathname)) {
+    const { isComplete } = await fetchProfileCompletionStatus(
+      supabase,
+      user.id
+    );
+
+    if (!isComplete && pathname !== ONBOARDING_ROUTE) {
+      if (isProtectedRoute(pathname) || pathname === "/") {
+        const url = request.nextUrl.clone();
+        url.pathname = ONBOARDING_ROUTE;
+        return NextResponse.redirect(url);
+      }
+    }
+
+    if (isComplete && pathname === ONBOARDING_ROUTE) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

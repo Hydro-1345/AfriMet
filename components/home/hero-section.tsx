@@ -2,7 +2,11 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  isAuthenticated: boolean;
+}
+
+export function HeroSection({ isAuthenticated }: HeroSectionProps) {
   return (
     <section
       aria-labelledby="hero-heading"
@@ -27,15 +31,31 @@ export function HeroSection() {
         </p>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button asChild size="lg">
-            <Link href="/register">
-              Get started
-              <ArrowRight aria-hidden className="h-4 w-4" />
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link href="/login">Sign in</Link>
-          </Button>
+          {isAuthenticated ? (
+            <>
+              <Button asChild size="lg">
+                <Link href="/dashboard">
+                  Go to dashboard
+                  <ArrowRight aria-hidden className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href="/profile">View profile</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild size="lg">
+                <Link href="/register">
+                  Get started
+                  <ArrowRight aria-hidden className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href="/login">Sign in</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </section>

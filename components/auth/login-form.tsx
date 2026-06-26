@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthMessage } from "@/components/auth/auth-message";
+import { PasswordField } from "@/components/auth/password-field";
 import { FormField } from "@/components/auth/form-field";
 import { Button } from "@/components/ui/button";
 import { type LoginInput, loginSchema } from "@/lib/auth/schemas";
@@ -48,14 +49,13 @@ export function LoginForm() {
         disabled={isSubmitting}
       />
 
-      <FormField
+      <PasswordField
         autoComplete="current-password"
         error={errors.password}
         id="password"
         label="Password"
         placeholder="••••••••"
         registration={register("password")}
-        type="password"
         disabled={isSubmitting}
       />
 

@@ -1,34 +1,27 @@
-import type { HTMLAttributes } from "react";
 import type { FieldError, UseFormRegisterReturn } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
-interface FormFieldProps {
+interface SelectFieldProps {
   id: string;
   label: string;
-  type?: HTMLInputElement["type"];
-  inputMode?: HTMLAttributes<HTMLInputElement>["inputMode"];
-  autoComplete?: string;
   placeholder?: string;
   helperText?: string;
   error?: FieldError;
   disabled?: boolean;
-  readOnly?: boolean;
+  options: readonly { value: string; label: string }[];
   registration: UseFormRegisterReturn;
 }
 
-export function FormField({
+export function SelectField({
   id,
   label,
-  type = "text",
-  inputMode,
-  autoComplete,
-  placeholder,
+  placeholder = "Select an option",
   helperText,
   error,
   disabled,
-  readOnly,
+  options,
   registration,
-}: FormFieldProps) {
+}: SelectFieldProps) {
   const errorId = `${id}-error`;
   const helperId = `${id}-helper`;
   const describedBy =
@@ -41,19 +34,24 @@ export function FormField({
       <label className="block text-sm font-medium text-foreground" htmlFor={id}>
         {label}
       </label>
-      <Input
+      <select
         aria-describedby={describedBy}
         aria-invalid={error ? true : undefined}
-        autoComplete={autoComplete}
-        className="mt-1"
+        className={cn(
+          "mt-1 flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+          !registration.name && "text-muted-foreground"
+        )}
         disabled={disabled}
         id={id}
-        inputMode={inputMode}
-        placeholder={placeholder}
-        readOnly={readOnly}
-        type={type}
         {...registration}
-      />
+      >
+        <option value="">{placeholder}</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       {helperText && !error ? (
         <p className="mt-1.5 text-sm text-muted-foreground" id={helperId}>
           {helperText}

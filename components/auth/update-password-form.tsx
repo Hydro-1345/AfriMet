@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthMessage } from "@/components/auth/auth-message";
-import { FormField } from "@/components/auth/form-field";
+import { PasswordField } from "@/components/auth/password-field";
 import { Button } from "@/components/ui/button";
 import { updatePasswordAction } from "@/lib/auth/actions";
 import {
@@ -40,7 +40,7 @@ export function UpdatePasswordForm() {
     <form className="mt-5 space-y-3.5" noValidate onSubmit={handleSubmit(onSubmit)}>
       {formError ? <AuthMessage message={formError} variant="error" /> : null}
 
-      <FormField
+      <PasswordField
         autoComplete="new-password"
         error={errors.password}
         helperText={PASSWORD_REQUIREMENTS_HINT}
@@ -48,18 +48,16 @@ export function UpdatePasswordForm() {
         label="New password"
         placeholder="••••••••"
         registration={register("password")}
-        type="password"
         disabled={isSubmitting}
       />
 
-      <FormField
+      <PasswordField
         autoComplete="new-password"
         error={errors.confirmPassword}
         id="confirmPassword"
         label="Confirm new password"
         placeholder="••••••••"
         registration={register("confirmPassword")}
-        type="password"
         disabled={isSubmitting}
       />
 

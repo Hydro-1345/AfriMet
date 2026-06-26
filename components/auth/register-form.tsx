@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthMessage } from "@/components/auth/auth-message";
+import { PasswordField } from "@/components/auth/password-field";
 import { FormField } from "@/components/auth/form-field";
 import { Button } from "@/components/ui/button";
 import { signUpAction } from "@/lib/auth/actions";
@@ -73,7 +74,7 @@ export function RegisterForm() {
         disabled={isSubmitting}
       />
 
-      <FormField
+      <PasswordField
         autoComplete="new-password"
         error={errors.password}
         helperText={PASSWORD_REQUIREMENTS_HINT}
@@ -81,18 +82,16 @@ export function RegisterForm() {
         label="Password"
         placeholder="••••••••"
         registration={register("password")}
-        type="password"
         disabled={isSubmitting}
       />
 
-      <FormField
+      <PasswordField
         autoComplete="new-password"
         error={errors.confirmPassword}
         id="confirmPassword"
         label="Confirm password"
         placeholder="••••••••"
         registration={register("confirmPassword")}
-        type="password"
         disabled={isSubmitting}
       />
 

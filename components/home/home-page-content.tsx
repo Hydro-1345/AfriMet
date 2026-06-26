@@ -6,10 +6,14 @@ import { HeroSection } from "@/components/home/hero-section";
 import { ProblemSection } from "@/components/home/problem-section";
 import { Button } from "@/components/ui/button";
 
-export function HomePageContent() {
+interface HomePageContentProps {
+  isAuthenticated: boolean;
+}
+
+export function HomePageContent({ isAuthenticated }: HomePageContentProps) {
   return (
     <>
-      <HeroSection />
+      <HeroSection isAuthenticated={isAuthenticated} />
       <ProblemSection />
       <FeaturesSection />
       <BenefitsSection />
