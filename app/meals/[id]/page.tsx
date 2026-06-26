@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { UtensilsCrossed } from "lucide-react";
+import { Sparkles, UtensilsCrossed } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { DeleteMealButton } from "@/components/meals/delete-meal-button";
 import { PageContainer } from "@/components/layout/page-container";
+import { fetchMealAnalysis } from "@/lib/analysis/queries";
 import { formatMealDate, hasMealImage } from "@/lib/meals/format";
 import { fetchMealById } from "@/lib/meals/queries";
 import { isProfileComplete } from "@/lib/profile/completion";
@@ -49,6 +50,8 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
     notFound();
   }
 
+  const analysis = await fetchMealAnalysis(supabase, user.id, id);
+
   return (
     <PageContainer className="max-w-2xl py-6 sm:py-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -89,6 +92,37 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
             {meal.description}
           </p>
         </section>
+
+        {analysis?.status === "completed" && analysis.nutrition ? (
+          <section className="rounded-xl border border-border/60 bg-card p-5 shadow-sm sm:p-6">
+            <h2 className="text-lg font-semibold text-foreground">Nutrition estimate</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {Math.round(analysis.nutrition.calories)} kcal ·{" "}
+              {Math.round(analysis.nutrition.protein)} g protein ·{" "}
+              {Math.round(analysis.nutrition.carbs)} g carbs
+            </p>
+            <div className="mt-4">
+              <Button asChild variant="outline">
+                <Link href={`/meals/${meal.id}/analysis`}>View full analysis</Link>
+              </Button>
+            </div>
+          </section>
+        ) : (
+          <section className="rounded-xl border border-dashed border-border/60 bg-muted/20 px-6 py-6">
+            <p className="text-sm font-medium text-foreground">No AI analysis yet</p>
+            <p className="mt-1.5 text-sm text-muted-foreground">
+              Analyze this meal to get nutrition estimates and detected foods.
+            </p>
+            <div className="mt-4">
+              <Button asChild>
+                <Link href={`/meals/${meal.id}/analysis?start=1`}>
+                  <Sparkles aria-hidden className="h-4 w-4" />
+                  Analyze meal
+                </Link>
+              </Button>
+            </div>
+          </section>
+        )}
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Button asChild>

@@ -27,3 +27,10 @@ export type {
   FoodCategory,
   FoodSearchResult,
 } from "@/types/food";
+
+export type {
+  AnalysisActionResult,
+  MealAnalysis,
+  MealComponent,
+  NutritionRecord,
+} from "@/types/analysis";
