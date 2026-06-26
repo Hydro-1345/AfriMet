@@ -14,3 +14,9 @@ export type {
   HealthStatus,
   GoalType,
 } from "@/types/profile";
+
+export type {
+  Meal,
+  MealActionResult,
+  MealSummary,
+} from "@/types/meal";
