@@ -3,6 +3,7 @@ export const PROTECTED_ROUTES = [
   "/onboarding",
   "/profile",
   "/meals",
+  "/foods",
 ] as const;
 
 export const ONBOARDING_ROUTE = "/onboarding";
@@ -30,6 +31,7 @@ export function getNavLinks(isAuthenticated: boolean): NavLink[] {
       { href: "/", label: "Home" },
       { href: "/dashboard", label: "Dashboard" },
       { href: "/meals", label: "Meals" },
+      { href: "/foods", label: "Foods" },
       { href: "/profile", label: "Profile" },
     ];
   }

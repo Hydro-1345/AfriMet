@@ -20,3 +20,10 @@ export type {
   MealActionResult,
   MealSummary,
 } from "@/types/meal";
+
+export type {
+  Food,
+  FoodActionResult,
+  FoodCategory,
+  FoodSearchResult,
+} from "@/types/food";
