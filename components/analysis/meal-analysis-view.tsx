@@ -5,9 +5,11 @@ import { AnalyzeMealPanel } from "@/components/analysis/analyze-meal-panel";
 import { DetectedFoodsList } from "@/components/analysis/detected-foods-list";
 import { NutritionSummary } from "@/components/analysis/nutrition-summary";
 import { MetabolicInsightsSection } from "@/components/metabolic/metabolic-insights-section";
+import { RecommendationsSection } from "@/components/recommendations/recommendations-section";
 import type { Meal } from "@/types/meal";
 import type { MealAnalysis } from "@/types/analysis";
 import type { MetabolicAssessment } from "@/types/metabolic";
+import type { MealRecommendations } from "@/types/recommendation";
 
 interface MealAnalysisViewProps {
   meal: Meal;
@@ -15,6 +17,8 @@ interface MealAnalysisViewProps {
   autoStart?: boolean;
   metabolicAssessment?: MetabolicAssessment | null;
   metabolicError?: string | null;
+  mealRecommendations?: MealRecommendations | null;
+  recommendationsError?: string | null;
 }
 
 export function MealAnalysisView({
@@ -23,6 +27,8 @@ export function MealAnalysisView({
   autoStart = false,
   metabolicAssessment = null,
   metabolicError = null,
+  mealRecommendations = null,
+  recommendationsError = null,
 }: MealAnalysisViewProps) {
   const hasDescription = meal.description.trim().length > 0;
   const hasImage = Boolean(meal.imageUrl);
@@ -59,6 +65,12 @@ export function MealAnalysisView({
             canGenerate={Boolean(analysis.nutrition)}
             errorMessage={metabolicError}
             initialAssessment={metabolicAssessment}
+            mealId={meal.id}
+          />
+          <RecommendationsSection
+            canGenerate={Boolean(analysis.nutrition && metabolicAssessment)}
+            errorMessage={recommendationsError}
+            initialRecommendations={mealRecommendations}
             mealId={meal.id}
           />
         </>

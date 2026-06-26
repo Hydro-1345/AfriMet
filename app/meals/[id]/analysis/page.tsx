@@ -12,6 +12,7 @@ import { isProfileComplete } from "@/lib/profile/completion";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
 import { ensureMetabolicAssessment } from "@/services/metabolic.service";
+import { ensureMealRecommendations } from "@/services/recommendation.service";
 import { Button } from "@/components/ui/button";
 
 interface MealAnalysisPageProps {
@@ -69,6 +70,8 @@ export default async function MealAnalysisPage({
 
   let metabolicAssessment = null;
   let metabolicError: string | null = null;
+  let mealRecommendations = null;
+  let recommendationsError: string | null = null;
 
   if (analysis?.status === "completed" && analysis.nutrition) {
     const metabolicResult = await ensureMetabolicAssessment(user.id, id);
@@ -77,6 +80,16 @@ export default async function MealAnalysisPage({
       metabolicError = metabolicResult.error;
     } else {
       metabolicAssessment = metabolicResult.assessment ?? null;
+    }
+
+    if (metabolicAssessment) {
+      const recommendationsResult = await ensureMealRecommendations(user.id, id);
+
+      if (recommendationsResult.error) {
+        recommendationsError = recommendationsResult.error;
+      } else {
+        mealRecommendations = recommendationsResult.recommendations ?? null;
+      }
     }
   }
 
@@ -124,8 +137,10 @@ export default async function MealAnalysisPage({
         analysis={analysis}
         autoStart={shouldAutoStart && analysis?.status !== "completed"}
         meal={meal}
+        mealRecommendations={mealRecommendations}
         metabolicAssessment={metabolicAssessment}
         metabolicError={metabolicError}
+        recommendationsError={recommendationsError}
       />
     </PageContainer>
   );

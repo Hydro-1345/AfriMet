@@ -175,14 +175,14 @@ export async function analyzeMealAction(
 
   const analysis = await fetchMealAnalysis(supabase, userId, parsed.data.mealId);
 
+  if (analysis?.status === "completed" && analysis.nutrition) {
+    await ensureMetabolicAssessment(userId, parsed.data.mealId, { force: true });
+  }
+
   revalidatePath(`/meals/${parsed.data.mealId}`);
   revalidatePath(`/meals/${parsed.data.mealId}/analysis`);
   revalidatePath("/meals");
   revalidatePath("/dashboard");
-
-  if (analysis?.status === "completed" && analysis.nutrition) {
-    await ensureMetabolicAssessment(userId, parsed.data.mealId, { force: true });
-  }
 
   return {
     success: true,

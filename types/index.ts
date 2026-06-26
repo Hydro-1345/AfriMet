@@ -41,3 +41,9 @@ export type {
   HealthInsight,
   MetabolicScore,
 } from "@/types/metabolic";
+
+export type {
+  Recommendation,
+  RecommendationActionResult,
+  MealRecommendations,
+} from "@/types/recommendation";

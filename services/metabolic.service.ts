@@ -14,6 +14,7 @@ import { generateMetabolicAssessmentSchema } from "@/lib/metabolic/schemas";
 import { fetchMealAnalysis } from "@/lib/analysis/queries";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
+import { ensureMealRecommendations } from "@/services/recommendation.service";
 import type { MetabolicActionResult, MetabolicAssessment } from "@/types/metabolic";
 import type { MealComponent, NutritionRecord } from "@/types/analysis";
 import type { UserProfile } from "@/types/profile";
@@ -202,8 +203,7 @@ export async function ensureMetabolicAssessment(
     return { error: "Unable to load metabolic insights. Please try again." };
   }
 
-  revalidatePath(`/meals/${mealId}/analysis`);
-  revalidatePath(`/meals/${mealId}`);
+  await ensureMealRecommendations(userId, mealId, { force: options?.force });
 
   return {
     success: true,
@@ -235,9 +235,16 @@ export async function generateMetabolicAssessmentAction(
     return { error: "You must be signed in to generate metabolic insights." };
   }
 
-  return ensureMetabolicAssessment(userId, parsed.data.mealId, {
+  const result = await ensureMetabolicAssessment(userId, parsed.data.mealId, {
     force: parsed.data.force,
   });
+
+  if (result.success && !result.cached) {
+    revalidatePath(`/meals/${parsed.data.mealId}/analysis`);
+    revalidatePath(`/meals/${parsed.data.mealId}`);
+  }
+
+  return result;
 }
 
 export async function getMetabolicAssessmentForMeal(

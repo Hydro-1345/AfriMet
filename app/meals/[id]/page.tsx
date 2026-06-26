@@ -13,6 +13,7 @@ import { isProfileComplete } from "@/lib/profile/completion";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
 import { getMetabolicAssessmentForMeal } from "@/services/metabolic.service";
+import { getMealRecommendationsForMeal } from "@/services/recommendation.service";
 import { Button } from "@/components/ui/button";
 
 interface MealDetailPageProps {
@@ -57,6 +58,11 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
     analysis?.status === "completed" && analysis.nutrition
       ? await getMetabolicAssessmentForMeal(user.id, id)
       : null;
+  const mealRecommendations =
+    analysis?.status === "completed" && analysis.nutrition
+      ? await getMealRecommendationsForMeal(user.id, id)
+      : null;
+  const topRecommendation = mealRecommendations?.recommendations[0] ?? null;
 
   return (
     <PageContainer className="max-w-2xl py-6 sm:py-8">
@@ -111,6 +117,11 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
               <p className="mt-2 text-sm text-muted-foreground">
                 {getGlycemicImpactLabel(metabolicAssessment.score.glycemicImpact)} ·{" "}
                 {getSatietyEstimateLabel(metabolicAssessment.score.satietyEstimate)}
+              </p>
+            ) : null}
+            {topRecommendation ? (
+              <p className="mt-2 text-sm text-foreground">
+                Top suggestion: {topRecommendation.recommendationText}
               </p>
             ) : null}
             <div className="mt-4">
