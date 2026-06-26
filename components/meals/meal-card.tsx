@@ -1,11 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, ImageIcon } from "lucide-react";
+import { useLinkStatus } from "next/link";
+import { ChevronRight, ImageIcon, Loader2 } from "lucide-react";
 import {
   formatMealDateShort,
   hasMealImage,
   truncateDescription,
 } from "@/lib/meals/format";
+import { cn } from "@/lib/utils";
 import type { Meal } from "@/types/meal";
 
 interface MealCardProps {
@@ -13,12 +17,36 @@ interface MealCardProps {
   showChevron?: boolean;
 }
 
+function MealCardPendingFeedback() {
+  const { pending } = useLinkStatus();
+
+  if (!pending) {
+    return null;
+  }
+
+  return (
+    <>
+      <span className="sr-only">Opening meal...</span>
+      <div
+        aria-hidden
+        className="absolute inset-0 flex items-center justify-center rounded-xl bg-background/70"
+      >
+        <Loader2 className="h-5 w-5 animate-spin text-primary" />
+      </div>
+    </>
+  );
+}
+
 export function MealCard({ meal, showChevron = true }: MealCardProps) {
   return (
     <Link
-      className="group flex items-start gap-4 rounded-xl border border-border/60 bg-card p-4 shadow-sm transition-colors hover:border-primary/30 hover:bg-muted/20 sm:p-5"
+      className={cn(
+        "group relative flex items-start gap-4 rounded-xl border border-border/60 bg-card p-4 shadow-sm transition-opacity transition-colors hover:border-primary/30 hover:bg-muted/20 sm:p-5"
+      )}
       href={`/meals/${meal.id}`}
     >
+      <MealCardPendingFeedback />
+
       <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted/40">
         {hasMealImage(meal) ? (
           <Image

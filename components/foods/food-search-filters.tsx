@@ -105,6 +105,7 @@ export function FoodSearchFilters({
           </label>
           <select
             className="mt-1 flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isPending}
             id="food-category"
             onChange={(event) => setCategory(event.target.value)}
             value={category}
@@ -124,6 +125,7 @@ export function FoodSearchFilters({
           </label>
           <select
             className="mt-1 flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isPending}
             id="food-region"
             onChange={(event) => setRegion(event.target.value)}
             value={region}

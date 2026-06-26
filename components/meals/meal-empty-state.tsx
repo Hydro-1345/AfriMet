@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { UtensilsCrossed } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 
 interface MealEmptyStateProps {
   title?: string;
@@ -26,9 +25,9 @@ export function MealEmptyState({
       <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
       {showAddButton ? (
         <div className="mt-5">
-          <Button asChild>
-            <Link href="/meals/new">Log your first meal</Link>
-          </Button>
+          <PendingButtonLink href="/meals/new" pendingText="Opening...">
+            Log your first meal
+          </PendingButtonLink>
         </div>
       ) : null}
     </div>

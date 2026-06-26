@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthMessage } from "@/components/auth/auth-message";
@@ -45,6 +46,7 @@ export function OnboardingForm({
 }: OnboardingFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isStepLoading, setIsStepLoading] = useState(false);
   const form = useForm<ProfileFormInput>({
     resolver: zodResolver(profileSchema),
     defaultValues: getDefaultValues(defaultName, existingProfile),
@@ -86,10 +88,16 @@ export function OnboardingForm({
   }
 
   async function handleNext() {
-    const isValid = await validateCurrentStep();
+    setIsStepLoading(true);
 
-    if (isValid && currentStep < ONBOARDING_STEPS.length) {
-      setCurrentStep((step) => step + 1);
+    try {
+      const isValid = await validateCurrentStep();
+
+      if (isValid && currentStep < ONBOARDING_STEPS.length) {
+        setCurrentStep((step) => step + 1);
+      }
+    } finally {
+      setIsStepLoading(false);
     }
   }
 
@@ -132,7 +140,7 @@ export function OnboardingForm({
         <div className="mt-6">
           <ProfileFormFields
             control={control}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isStepLoading}
             errors={errors}
             register={register}
             step={currentStep}
@@ -144,7 +152,7 @@ export function OnboardingForm({
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
         <Button
-          disabled={currentStep === 1 || isSubmitting}
+          disabled={currentStep === 1 || isSubmitting || isStepLoading}
           onClick={handleBack}
           type="button"
           variant="outline"
@@ -153,16 +161,24 @@ export function OnboardingForm({
         </Button>
 
         {currentStep < ONBOARDING_STEPS.length ? (
-          <Button disabled={isSubmitting} onClick={handleNext} type="button">
-            Continue
+          <Button disabled={isSubmitting || isStepLoading} onClick={handleNext} type="button">
+            {isStepLoading ? "Checking..." : "Continue"}
           </Button>
         ) : (
           <Button
+            aria-busy={isSubmitting}
             disabled={isSubmitting}
             onClick={() => void handleSubmit(onSubmit)()}
             type="button"
           >
-            {isSubmitting ? "Saving profile..." : "Save profile"}
+            {isSubmitting ? (
+              <>
+                <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+                Saving profile...
+              </>
+            ) : (
+              "Save profile"
+            )}
           </Button>
         )}
       </div>

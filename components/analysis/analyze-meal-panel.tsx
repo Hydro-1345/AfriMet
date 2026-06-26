@@ -16,6 +16,7 @@ interface AnalyzeMealPanelProps {
   hasImage: boolean;
   existingAnalysis?: MealAnalysis | null;
   autoStart?: boolean;
+  onPendingChange?: (pending: boolean) => void;
 }
 
 export function AnalyzeMealPanel({
@@ -24,6 +25,7 @@ export function AnalyzeMealPanel({
   hasImage,
   existingAnalysis,
   autoStart = false,
+  onPendingChange,
 }: AnalyzeMealPanelProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +43,10 @@ export function AnalyzeMealPanel({
       isMountedRef.current = false;
     };
   }, []);
+
+  useEffect(() => {
+    onPendingChange?.(isPending);
+  }, [isPending, onPendingChange]);
 
   const runAnalysis = useCallback(async (force = false) => {
     setError(null);

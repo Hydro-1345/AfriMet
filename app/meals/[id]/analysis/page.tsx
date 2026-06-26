@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Sparkles } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { MealAnalysisView } from "@/components/analysis/meal-analysis-view";
 import { PageContainer } from "@/components/layout/page-container";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import { fetchMealAnalysis } from "@/lib/analysis/queries";
 import { formatMealDate, hasMealImage } from "@/lib/meals/format";
 import { fetchMealById } from "@/lib/meals/queries";
@@ -13,7 +13,6 @@ import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
 import { ensureMetabolicAssessment } from "@/services/metabolic.service";
 import { ensureMealRecommendations } from "@/services/recommendation.service";
-import { Button } from "@/components/ui/button";
 
 interface MealAnalysisPageProps {
   params: Promise<{ id: string }>;
@@ -109,9 +108,13 @@ export default async function MealAnalysisPage({
             </p>
           </div>
         </div>
-        <Button asChild variant="outline">
-          <Link href={`/meals/${meal.id}`}>Back to meal</Link>
-        </Button>
+        <PendingButtonLink
+          href={`/meals/${meal.id}`}
+          pendingText="Loading meal..."
+          variant="outline"
+        >
+          Back to meal
+        </PendingButtonLink>
       </div>
 
       {hasMealImage(meal) ? (

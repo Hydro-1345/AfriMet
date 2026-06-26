@@ -1,13 +1,12 @@
 import { CheckCircle2, CircleDashed, UserCircle } from "lucide-react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import {
   getMissingProfileFields,
   getProfileCompletionPercent,
   isProfileComplete,
 } from "@/lib/profile/completion";
+import { cn } from "@/lib/utils";
 import type { UserProfile } from "@/types/profile";
-import { Button } from "@/components/ui/button";
 
 interface ProfileCompletionCardProps {
   profile: UserProfile | null;
@@ -84,12 +83,14 @@ export function ProfileCompletionCard({
       ) : null}
 
       <div className="mt-5">
-        <Button asChild variant={complete ? "outline" : "default"}>
-          <Link href={complete ? "/profile" : "/onboarding"}>
-            <UserCircle aria-hidden className="h-4 w-4" />
-            {complete ? "Edit profile" : "Complete profile"}
-          </Link>
-        </Button>
+        <PendingButtonLink
+          href={complete ? "/profile" : "/onboarding"}
+          pendingText={complete ? "Opening profile..." : "Opening onboarding..."}
+          variant={complete ? "outline" : "default"}
+        >
+          <UserCircle aria-hidden className="h-4 w-4" />
+          {complete ? "Edit profile" : "Complete profile"}
+        </PendingButtonLink>
       </div>
     </div>
   );

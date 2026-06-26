@@ -1,18 +1,46 @@
+"use client";
+
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { useLinkStatus } from "next/link";
+import { ChevronRight, Loader2 } from "lucide-react";
 import { getFoodRegionLabel } from "@/lib/foods/format";
+import { cn } from "@/lib/utils";
 import type { Food } from "@/types/food";
 
 interface FoodCardProps {
   food: Food;
 }
 
+function FoodCardPendingFeedback() {
+  const { pending } = useLinkStatus();
+
+  if (!pending) {
+    return null;
+  }
+
+  return (
+    <>
+      <span className="sr-only">Opening food details...</span>
+      <div
+        aria-hidden
+        className="absolute inset-0 flex items-center justify-center rounded-xl bg-background/70"
+      >
+        <Loader2 className="h-5 w-5 animate-spin text-primary" />
+      </div>
+    </>
+  );
+}
+
 export function FoodCard({ food }: FoodCardProps) {
   return (
     <Link
-      className="group flex items-start justify-between gap-4 rounded-xl border border-border/60 bg-card p-4 shadow-sm transition-colors hover:border-primary/30 hover:bg-muted/20 sm:p-5"
+      className={cn(
+        "group relative flex items-start justify-between gap-4 rounded-xl border border-border/60 bg-card p-4 shadow-sm transition-colors hover:border-primary/30 hover:bg-muted/20 sm:p-5"
+      )}
       href={`/foods/${food.slug}`}
     >
+      <FoodCardPendingFeedback />
+
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <p className="text-sm font-medium text-foreground group-hover:text-primary">

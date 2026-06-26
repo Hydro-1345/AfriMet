@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthMessage } from "@/components/auth/auth-message";
@@ -137,8 +138,15 @@ export function EditProfileForm({ profile }: EditProfileFormProps) {
       ) : null}
 
       <div className="flex justify-end">
-        <Button disabled={isSubmitting || !isDirty} type="submit">
-          {isSubmitting ? "Saving changes..." : "Save profile"}
+        <Button aria-busy={isSubmitting} disabled={isSubmitting || !isDirty} type="submit">
+          {isSubmitting ? (
+            <>
+              <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+              Saving changes...
+            </>
+          ) : (
+            "Save profile"
+          )}
         </Button>
       </div>
     </form>

@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AddMealForm } from "@/components/meals/add-meal-form";
 import { PageContainer } from "@/components/layout/page-container";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import { isProfileComplete } from "@/lib/profile/completion";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Log Meal",
@@ -48,9 +47,9 @@ export default async function NewMealPage() {
             </div>
           </div>
         </div>
-        <Button asChild variant="outline">
-          <Link href="/meals">Back to history</Link>
-        </Button>
+        <PendingButtonLink href="/meals" pendingText="Loading..." variant="outline">
+          Back to history
+        </PendingButtonLink>
       </div>
 
       <AddMealForm />

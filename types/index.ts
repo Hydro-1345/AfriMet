@@ -47,3 +47,11 @@ export type {
   RecommendationActionResult,
   MealRecommendations,
 } from "@/types/recommendation";
+
+export type {
+  AnalyticsPeriod,
+  DashboardAnalytics,
+  DashboardAnalyticsResult,
+  DistributionItem,
+  TrendPoint,
+} from "@/types/analytics";

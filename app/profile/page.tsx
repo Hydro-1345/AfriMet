@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { UserRound } from "lucide-react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { EditProfileForm } from "@/components/profile/edit-profile-form";
 import { PageContainer } from "@/components/layout/page-container";
 import { ProfileCompletionCard } from "@/components/profile/profile-completion-card";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -48,9 +47,9 @@ export default async function ProfilePage() {
             </div>
           </div>
         </div>
-        <Button asChild variant="outline">
-          <Link href="/dashboard">Back to dashboard</Link>
-        </Button>
+        <PendingButtonLink href="/dashboard" pendingText="Loading..." variant="outline">
+          Back to dashboard
+        </PendingButtonLink>
       </div>
 
       <ProfileCompletionCard className="mt-6" profile={profile} />

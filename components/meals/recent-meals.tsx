@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { MealCard } from "@/components/meals/meal-card";
 import { MealEmptyState } from "@/components/meals/meal-empty-state";
-import { Button } from "@/components/ui/button";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import type { Meal } from "@/types/meal";
 
 interface RecentMealsProps {
@@ -22,13 +21,18 @@ export function RecentMeals({ meals, totalCount }: RecentMealsProps) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button asChild size="sm">
-            <Link href="/meals/new">Log meal</Link>
-          </Button>
+          <PendingButtonLink href="/meals/new" pendingText="Opening..." size="sm">
+            Log meal
+          </PendingButtonLink>
           {totalCount > 0 ? (
-            <Button asChild size="sm" variant="outline">
-              <Link href="/meals">View history</Link>
-            </Button>
+            <PendingButtonLink
+              href="/meals"
+              pendingText="Loading..."
+              size="sm"
+              variant="outline"
+            >
+              View history
+            </PendingButtonLink>
           ) : null}
         </div>
       </div>

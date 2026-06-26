@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthMessage } from "@/components/auth/auth-message";
@@ -236,7 +237,14 @@ export function MealForm({
 
       <div className="flex justify-end">
         <Button disabled={isSubmitting} type="submit">
-          {isSubmitting ? pendingLabel : submitLabel}
+          {isSubmitting ? (
+            <>
+              <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+              {pendingLabel}
+            </>
+          ) : (
+            submitLabel
+          )}
         </Button>
       </div>
     </form>

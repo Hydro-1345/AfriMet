@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { Pencil } from "lucide-react";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { EditMealForm } from "@/components/meals/edit-meal-form";
 import { PageContainer } from "@/components/layout/page-container";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import { fetchMealById } from "@/lib/meals/queries";
 import { isProfileComplete } from "@/lib/profile/completion";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
 
 interface EditMealPageProps {
   params: Promise<{ id: string }>;
@@ -63,9 +62,13 @@ export default async function EditMealPage({ params }: EditMealPageProps) {
             </p>
           </div>
         </div>
-        <Button asChild variant="outline">
-          <Link href={`/meals/${meal.id}`}>Back to details</Link>
-        </Button>
+        <PendingButtonLink
+          href={`/meals/${meal.id}`}
+          pendingText="Loading meal..."
+          variant="outline"
+        >
+          Back to details
+        </PendingButtonLink>
       </div>
 
       <EditMealForm meal={meal} />

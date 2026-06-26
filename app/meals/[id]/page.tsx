@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Sparkles, UtensilsCrossed } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import { DeleteMealButton } from "@/components/meals/delete-meal-button";
 import { PageContainer } from "@/components/layout/page-container";
 import { fetchMealAnalysis } from "@/lib/analysis/queries";
@@ -14,7 +14,6 @@ import { fetchUserProfile } from "@/lib/profile/queries";
 import { createClient } from "@/lib/supabase/server";
 import { getMetabolicAssessmentForMeal } from "@/services/metabolic.service";
 import { getMealRecommendationsForMeal } from "@/services/recommendation.service";
-import { Button } from "@/components/ui/button";
 
 interface MealDetailPageProps {
   params: Promise<{ id: string }>;
@@ -80,9 +79,9 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
             </p>
           </div>
         </div>
-        <Button asChild variant="outline">
-          <Link href="/meals">Back to history</Link>
-        </Button>
+        <PendingButtonLink href="/meals" pendingText="Loading..." variant="outline">
+          Back to history
+        </PendingButtonLink>
       </div>
 
       <div className="mt-6 space-y-6">
@@ -125,9 +124,13 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
               </p>
             ) : null}
             <div className="mt-4">
-              <Button asChild variant="outline">
-                <Link href={`/meals/${meal.id}/analysis`}>View full analysis</Link>
-              </Button>
+              <PendingButtonLink
+                href={`/meals/${meal.id}/analysis`}
+                pendingText="Loading analysis..."
+                variant="outline"
+              >
+                View full analysis
+              </PendingButtonLink>
             </div>
           </section>
         ) : (
@@ -137,20 +140,21 @@ export default async function MealDetailPage({ params }: MealDetailPageProps) {
               Analyze this meal to get nutrition estimates and detected foods.
             </p>
             <div className="mt-4">
-              <Button asChild>
-                <Link href={`/meals/${meal.id}/analysis?start=1`}>
-                  <Sparkles aria-hidden className="h-4 w-4" />
-                  Analyze meal
-                </Link>
-              </Button>
+              <PendingButtonLink
+                href={`/meals/${meal.id}/analysis?start=1`}
+                pendingText="Starting analysis..."
+              >
+                <Sparkles aria-hidden className="h-4 w-4" />
+                Analyze meal
+              </PendingButtonLink>
             </div>
           </section>
         )}
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Button asChild>
-            <Link href={`/meals/${meal.id}/edit`}>Edit meal</Link>
-          </Button>
+          <PendingButtonLink href={`/meals/${meal.id}/edit`} pendingText="Opening editor...">
+            Edit meal
+          </PendingButtonLink>
           <DeleteMealButton mealId={meal.id} />
         </div>
       </div>

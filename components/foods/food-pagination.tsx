@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { PendingLinkLabel } from "@/components/ui/pending-link-label";
 import { Button } from "@/components/ui/button";
 import type { FoodSearchParams } from "@/lib/foods/schemas";
 import { cn } from "@/lib/utils";
@@ -58,8 +61,12 @@ export function FoodPagination({
         {previousPage ? (
           <Button asChild size="sm" variant="outline">
             <Link href={buildFoodsHref(searchParams, previousPage)}>
-              <ChevronLeft aria-hidden className="h-4 w-4" />
-              Previous
+              <PendingLinkLabel pendingText="Loading...">
+                <>
+                  <ChevronLeft aria-hidden className="h-4 w-4" />
+                  Previous
+                </>
+              </PendingLinkLabel>
             </Link>
           </Button>
         ) : (
@@ -71,8 +78,12 @@ export function FoodPagination({
         {nextPage ? (
           <Button asChild size="sm" variant="outline">
             <Link href={buildFoodsHref(searchParams, nextPage)}>
-              Next
-              <ChevronRight aria-hidden className="h-4 w-4" />
+              <PendingLinkLabel pendingText="Loading...">
+                <>
+                  Next
+                  <ChevronRight aria-hidden className="h-4 w-4" />
+                </>
+              </PendingLinkLabel>
             </Link>
           </Button>
         ) : (

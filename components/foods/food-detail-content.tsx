@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import { formatServing, getFoodRegionLabel } from "@/lib/foods/format";
-import { Button } from "@/components/ui/button";
 import type { Food } from "@/types/food";
 
 interface FoodDetailContentProps {
@@ -61,12 +60,10 @@ export function FoodDetailContent({ food }: FoodDetailContentProps) {
       ) : null}
 
       <div>
-        <Button asChild variant="outline">
-          <Link href="/foods">
-            <ArrowLeft aria-hidden className="h-4 w-4" />
-            Back to food library
-          </Link>
-        </Button>
+        <PendingButtonLink href="/foods" pendingText="Loading..." variant="outline">
+          <ArrowLeft aria-hidden className="h-4 w-4" />
+          Back to food library
+        </PendingButtonLink>
       </div>
     </div>
   );

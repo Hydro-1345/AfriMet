@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { Plus, UtensilsCrossed } from "lucide-react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { PendingButtonLink } from "@/components/ui/pending-button-link";
 import { MealList } from "@/components/meals/meal-list";
 import { PageContainer } from "@/components/layout/page-container";
 import { isProfileComplete } from "@/lib/profile/completion";
 import { fetchUserProfile } from "@/lib/profile/queries";
 import { fetchUserMeals } from "@/lib/meals/queries";
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Meal History",
@@ -51,12 +50,10 @@ export default async function MealsPage() {
             </p>
           </div>
         </div>
-        <Button asChild>
-          <Link href="/meals/new">
-            <Plus aria-hidden className="h-4 w-4" />
-            Log meal
-          </Link>
-        </Button>
+        <PendingButtonLink href="/meals/new" pendingText="Opening...">
+          <Plus aria-hidden className="h-4 w-4" />
+          Log meal
+        </PendingButtonLink>
       </div>
 
       <div className="mt-6">
