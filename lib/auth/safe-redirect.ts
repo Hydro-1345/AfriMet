@@ -2,7 +2,7 @@ const BLOCKED_REDIRECT_PREFIXES = [
   "/login",
   "/register",
   "/forgot-password",
-  "/auth/",
+  "/auth/callback",
 ] as const;
 
 /**

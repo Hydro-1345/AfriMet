@@ -1,23 +1,29 @@
 # AfriMet Documentation
 
-Project planning and specification documents live in the repository root:
+## Product specification
+
+Planning documents live in `project-docs/`:
 
 | Document | Description |
 | -------- | ----------- |
-| Vision.docx | Product mission, target users, and long-term vision |
-| Requirements.docx | MVP features and success metrics |
-| Architecture.docx | System architecture and technology decisions |
-| Technical Specification.docx | Screens, database design, and AI workflows |
-| Setup Blueprint.docx | Accounts, services, and environment variables |
-| Build Plan.docx | Sprint-by-sprint build roadmap |
-| Development Rules.docx | Engineering standards and sprint rules |
-| Ai - Collaboration Rules.docx | AI assistant collaboration guidelines |
-| Tech Stack Standards.docx | Health-Tech Lab technology standards |
-| Project Status.docx | Current sprint status and project health |
+| Vision.md | Product mission and target users |
+| Requirements.md | MVP features and success metrics |
+| Architecture.md | System architecture |
+| Technical Specification.md | Screens, database, AI workflows |
+| Setup Blueprint.md | Accounts, services, environment variables |
+| Build Plan.md | Sprint roadmap |
+| Development Rules.md | Engineering standards |
+| Project Status.md | Current sprint status |
 
-## Sprint Status
+## Operational docs
 
-- **Sprint 0** — Infrastructure & Environment: In progress
-- **Sprint 1+** — Not started
+| Document | Description |
+| -------- | ----------- |
+| [DEPLOYMENT.md](./DEPLOYMENT.md) | Production deployment guide |
+| ../README.md | Local setup and project overview |
 
-Refer to `Project Status.docx` for the authoritative current state.
+## Sprint status
+
+**MVP v1.0 complete** — Sprints 0 through 11 (Deployment & Launch Readiness).
+
+Refer to `project-docs/Project Status.md` for the authoritative current state.

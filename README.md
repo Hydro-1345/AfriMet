@@ -1,27 +1,29 @@
 # AfriMet
 
-AfriMet is a culturally-aware metabolic health platform for African and diaspora populations. It helps users understand the nutritional, metabolic, and financial impact of their meals through AI-assisted food analysis and culturally relevant recommendations.
+AfriMet is a culturally-aware metabolic health platform for African and diaspora populations. It helps users understand the nutritional and metabolic impact of their meals through AI-assisted food analysis, metabolic insights, and personalized recommendations.
 
-This repository contains the AfriMet web application built with Next.js, TypeScript, Tailwind CSS, and Supabase.
+This repository contains the AfriMet MVP web application built with Next.js, TypeScript, Tailwind CSS, and Supabase.
 
 ## Tech Stack
 
 | Layer        | Technology              |
 | ------------ | ----------------------- |
-| Frontend     | Next.js, TypeScript     |
+| Frontend     | Next.js 15, TypeScript  |
 | Styling      | Tailwind CSS            |
-| Backend      | Next.js API Routes      |
+| Backend      | Next.js Server Actions  |
 | Database     | Supabase (PostgreSQL)   |
 | Auth         | Supabase Auth           |
 | Storage      | Supabase Storage        |
+| AI           | OpenAI (server-side)    |
 | Deployment   | Vercel                  |
 
 ## Prerequisites
 
 - [Node.js LTS](https://nodejs.org/) (v20 or later recommended)
 - [Git](https://git-scm.com/)
-- A [Supabase](https://supabase.com/) project (for database, auth, and storage)
+- A [Supabase](https://supabase.com/) project
 - A [Vercel](https://vercel.com/) account (for deployment)
+- An [OpenAI](https://platform.openai.com/) API key (for meal analysis)
 
 ## Local Development Setup
 
@@ -40,37 +42,33 @@ npm install
 
 ### 3. Configure environment variables
 
-Copy the example environment file and fill in your values:
-
 ```bash
 cp .env.example .env.local
 ```
 
-Required for Supabase connectivity:
-
-| Variable                         | Description                          |
-| -------------------------------- | ------------------------------------ |
-| `NEXT_PUBLIC_SUPABASE_URL`       | Supabase project URL                 |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY`  | Supabase anonymous (public) key      |
-| `SUPABASE_SERVICE_ROLE_KEY`      | Supabase service role key (server only) |
-
-Optional until later sprints:
-
-| Variable               | Required from |
-| ---------------------- | ------------- |
-| `OPENAI_API_KEY`       | Sprint 6      |
-| `GOOGLE_CLIENT_ID`     | Sprint 2      |
-| `GOOGLE_CLIENT_SECRET` | Sprint 2      |
+| Variable                         | Required | Description                          |
+| -------------------------------- | -------- | ------------------------------------ |
+| `NEXT_PUBLIC_SUPABASE_URL`       | Yes      | Supabase project URL                 |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY`  | Yes      | Supabase anonymous (public) key      |
+| `SUPABASE_SERVICE_ROLE_KEY`      | Yes      | Supabase service role key (server only) |
+| `NEXT_PUBLIC_SITE_URL`           | Yes      | App URL (`http://localhost:3000` locally) |
+| `OPENAI_API_KEY`                 | Yes*     | OpenAI key for meal analysis         |
+| `GOOGLE_CLIENT_ID`               | No       | Future Google OAuth                  |
+| `GOOGLE_CLIENT_SECRET`           | No       | Future Google OAuth                  |
 
 Find Supabase keys under **Project Settings → API** in the Supabase dashboard.
 
-### 4. Start the development server
+### 4. Apply database migrations
+
+Run all files in `supabase/migrations/` against your Supabase project (SQL Editor or CLI).
+
+### 5. Start the development server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Available Scripts
 
@@ -84,46 +82,40 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Project Structure
 
 ```
-/app          Next.js App Router pages and layouts
-/components   Shared UI components
-/lib          Utilities, env handling, Supabase clients
-/services     Business logic and external service integrations
-/hooks        Custom React hooks
-/types        Shared TypeScript type definitions
-/public       Static assets
-/docs         Project documentation
+/app              Next.js App Router pages and layouts
+/components       Shared UI components
+/lib              Utilities, env handling, Supabase clients
+/services         Business logic and server actions
+/types            Shared TypeScript type definitions
+/supabase         Database migrations
+/docs             Deployment and project documentation
+/project-docs     Product specification documents
+/public           Static assets
 ```
 
-## Supabase Client Usage
+## Deployment
 
-**Browser (client components):**
+See **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** for the full production deployment guide, including:
 
-```typescript
-import { createBrowserSupabaseClient } from "@/lib/supabase/client";
+- Supabase auth redirect configuration
+- Vercel environment variables
+- OpenAI setup
+- Post-deploy verification checklist
 
-const supabase = createBrowserSupabaseClient();
-```
+Quick steps:
 
-**Server (API routes, Server Actions):**
+1. Push to GitHub.
+2. Import in Vercel and add environment variables from `.env.example`.
+3. Set `NEXT_PUBLIC_SITE_URL` to your production domain.
+4. Configure Supabase redirect URLs to match.
+5. Apply all Supabase migrations.
+6. Deploy.
 
-```typescript
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+## Current Status
 
-const supabase = createServerSupabaseClient();
-```
+**MVP v1.0 — Sprints 0–11 complete**
 
-## Deployment (Vercel)
-
-1. Push the repository to GitHub.
-2. Import the project in [Vercel](https://vercel.com/new).
-3. Add all environment variables from `.env.example` in the Vercel project settings.
-4. Deploy — Vercel auto-detects Next.js and requires no extra configuration.
-
-## Current Sprint
-
-**Sprint 0 — Infrastructure & Environment** (complete)
-
-Infrastructure foundation only. No product features, authentication, or AI functionality yet. See `Build Plan.docx` in the project root for the full sprint roadmap.
+Features: authentication, health profile, meal logging, African food library, AI meal analysis, metabolic scoring, personalized recommendations, analytics dashboard.
 
 ## License
 
