@@ -8,38 +8,53 @@ import { useForm } from "react-hook-form";
 import { AuthMessage } from "@/components/auth/auth-message";
 import { FormField } from "@/components/auth/form-field";
 import { Button } from "@/components/ui/button";
-import { forgotPasswordAction } from "@/lib/auth/actions";
+import { mapAuthError } from "@/lib/auth/errors";
 import {
   type ForgotPasswordInput,
   forgotPasswordSchema,
 } from "@/lib/auth/schemas";
+import { createClient } from "@/lib/supabase/client";
 
 export function ForgotPasswordForm() {
   const [formError, setFormError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<ForgotPasswordInput>({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const form = useForm<ForgotPasswordInput>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
     },
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
   async function onSubmit(values: ForgotPasswordInput) {
     setFormError(null);
     setSuccessMessage(null);
-    const result = await forgotPasswordAction(values);
+    setIsSubmitting(true);
 
-    if (result?.error) {
-      setFormError(result.error);
-      return;
-    }
+    try {
+      const supabase = createClient();
+      const redirectTo = `${window.location.origin}/auth/callback/recovery`;
 
-    if (result?.success && result.message) {
-      setSuccessMessage(result.message);
+      const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+        redirectTo,
+      });
+
+      if (error) {
+        setFormError(mapAuthError(error));
+        return;
+      }
+
+      setSuccessMessage(
+        "If an account exists for that email, you will receive a password reset link shortly."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   }
 

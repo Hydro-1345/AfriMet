@@ -47,8 +47,9 @@ In **Supabase Dashboard → Authentication → URL Configuration**, set:
 |---------|-------|
 | **Site URL** | `https://your-production-domain.com` |
 | **Redirect URLs** | `https://your-production-domain.com/auth/callback` |
-| | `https://your-production-domain.com/auth/callback?next=/auth/update-password` |
+| | `https://your-production-domain.com/auth/callback/recovery` |
 | | `http://localhost:3000/auth/callback` (for local dev) |
+| | `http://localhost:3000/auth/callback/recovery` (for local dev) |
 
 Add preview deployment URLs if using Vercel preview branches:
 
@@ -140,7 +141,7 @@ See the manual launch checklist in the Sprint 11 deliverables or run through:
 | Issue | Check |
 |-------|-------|
 | Auth email links go to localhost | Set `NEXT_PUBLIC_SITE_URL` in Vercel and Supabase Site URL |
-| Password reset lands on dashboard | Ensure `/auth/callback?next=/auth/update-password` is in Supabase redirect URLs |
+| Password reset lands on dashboard or login error | Add `/auth/callback/recovery` to Supabase redirect URLs; complete reset in the same browser that requested the link |
 | Meal images not loading | Confirm `NEXT_PUBLIC_SUPABASE_URL` matches project; check storage RLS |
 | AI analysis fails | Verify `OPENAI_API_KEY` in Vercel; check OpenAI billing/limits |
 | 401 on protected routes | Confirm Supabase keys match the same project |
