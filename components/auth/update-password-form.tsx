@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthMessage } from "@/components/auth/auth-message";
@@ -61,8 +62,15 @@ export function UpdatePasswordForm() {
         disabled={isSubmitting}
       />
 
-      <Button className="w-full" disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Updating password..." : "Update password"}
+      <Button aria-busy={isSubmitting} className="w-full" disabled={isSubmitting} type="submit">
+        {isSubmitting ? (
+          <>
+            <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+            Updating password...
+          </>
+        ) : (
+          "Update password"
+        )}
       </Button>
     </form>
   );

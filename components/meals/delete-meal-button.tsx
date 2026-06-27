@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { AuthMessage } from "@/components/auth/auth-message";
 import { deleteMealAction } from "@/lib/meals/actions";
 import { Button } from "@/components/ui/button";
@@ -47,12 +47,17 @@ export function DeleteMealButton({
   return (
     <div className="space-y-3">
       <Button
+        aria-busy={isPending}
         disabled={isPending}
         onClick={handleDelete}
         type="button"
         variant="destructive"
       >
-        <Trash2 aria-hidden className="h-4 w-4" />
+        {isPending ? (
+          <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+        ) : (
+          <Trash2 aria-hidden className="h-4 w-4" />
+        )}
         {isPending ? "Deleting..." : "Delete meal"}
       </Button>
       {error ? <AuthMessage message={error} variant="error" /> : null}

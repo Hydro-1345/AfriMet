@@ -153,7 +153,7 @@ export function MealForm({
               {...register("description")}
             />
             <p className="mt-1.5 text-sm text-muted-foreground" id="description-helper">
-              Describe what you ate. Nutrition analysis will be added in a later release.
+              Describe what you ate. You can analyze this meal for nutrition estimates after saving.
             </p>
             {errors.description ? (
               <p className="mt-1.5 text-sm text-destructive" id="description-error" role="alert">
@@ -236,7 +236,7 @@ export function MealForm({
       ) : null}
 
       <div className="flex justify-end">
-        <Button disabled={isSubmitting} type="submit">
+        <Button aria-busy={isSubmitting} disabled={isSubmitting} type="submit">
           {isSubmitting ? (
             <>
               <Loader2 aria-hidden className="h-4 w-4 animate-spin" />

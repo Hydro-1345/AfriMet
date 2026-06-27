@@ -1,4 +1,5 @@
 import { HomePageContent } from "@/components/home/home-page-content";
+import { PageContainer } from "@/components/layout/page-container";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function HomePage() {
@@ -8,8 +9,8 @@ export default async function HomePage() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+    <PageContainer>
       <HomePageContent isAuthenticated={!!user} />
-    </div>
+    </PageContainer>
   );
 }

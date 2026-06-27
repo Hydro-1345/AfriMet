@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { type LoginInput, loginSchema } from "@/lib/auth/schemas";
 import { signInAction } from "@/lib/auth/actions";
 
-export function LoginForm() {
+export function LoginForm({ redirectTo = "/dashboard" }: { redirectTo?: string }) {
   const [formError, setFormError] = useState<string | null>(null);
   const {
     register,
@@ -28,7 +28,7 @@ export function LoginForm() {
 
   async function onSubmit(values: LoginInput) {
     setFormError(null);
-    const result = await signInAction(values);
+    const result = await signInAction({ ...values, redirect: redirectTo });
 
     if (result?.error) {
       setFormError(result.error);

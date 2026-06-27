@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { SkipLink } from "@/components/layout/skip-link";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { createClient } from "@/lib/supabase/server";
 import "./globals.css";
@@ -50,6 +51,7 @@ export default async function RootLayout({
           enableSystem
           storageKey="afrimet-theme"
         >
+          <SkipLink />
           <Header isAuthenticated={!!user} />
           {children}
           <Footer />

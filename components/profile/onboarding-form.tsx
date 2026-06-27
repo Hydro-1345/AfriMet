@@ -162,7 +162,14 @@ export function OnboardingForm({
 
         {currentStep < ONBOARDING_STEPS.length ? (
           <Button disabled={isSubmitting || isStepLoading} onClick={handleNext} type="button">
-            {isStepLoading ? "Checking..." : "Continue"}
+            {isStepLoading ? (
+              <>
+                <Loader2 aria-hidden className="h-4 w-4 animate-spin" />
+                Checking...
+              </>
+            ) : (
+              "Continue"
+            )}
           </Button>
         ) : (
           <Button

@@ -2,6 +2,8 @@
  * Server-side Supabase client using the service role key.
  * Use only for trusted admin operations. Never import in client components.
  */
+import "server-only";
+
 import { createClient } from "@supabase/supabase-js";
 import { getServerEnv } from "@/lib/env";
 

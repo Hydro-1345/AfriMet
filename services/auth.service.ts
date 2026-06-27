@@ -14,6 +14,7 @@ import {
   updatePasswordSchema,
 } from "@/lib/auth/schemas";
 import { getSiteUrl } from "@/lib/auth/site-url";
+import { getSafeRedirectPath } from "@/lib/auth/safe-redirect";
 import { createClient } from "@/lib/supabase/server";
 
 export type AuthActionResult = {
@@ -23,7 +24,7 @@ export type AuthActionResult = {
 };
 
 export async function signInAction(
-  input: LoginInput
+  input: LoginInput & { redirect?: string }
 ): Promise<AuthActionResult> {
   const parsed = loginSchema.safeParse(input);
 
@@ -44,7 +45,7 @@ export async function signInAction(
   }
 
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  redirect(getSafeRedirectPath(input.redirect));
 }
 
 export async function signUpAction(

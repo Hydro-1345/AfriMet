@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import "server-only";
 import OpenAI from "openai";
 import {
   FOOD_CONTEXT_LIMIT,

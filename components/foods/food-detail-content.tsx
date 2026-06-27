@@ -39,7 +39,7 @@ export function FoodDetailContent({ food }: FoodDetailContentProps) {
           <h2 className="text-lg font-semibold text-foreground">Serving information</h2>
           <p className="mt-2 text-sm text-muted-foreground">{serving}</p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Nutrition values will be linked in a future release.
+            Reference serving size for the food library. Meal nutrition comes from AI analysis.
           </p>
         </section>
       ) : null}

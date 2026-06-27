@@ -1,3 +1,5 @@
+import "server-only";
+
 /**
  * Validated public environment variables (safe for client and server).
  */

@@ -2,13 +2,29 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LoginForm } from "@/components/auth/login-form";
 import { PageContainer } from "@/components/layout/page-container";
+import { getSafeRedirectPath } from "@/lib/auth/safe-redirect";
 
 export const metadata: Metadata = {
   title: "Login",
   description: "Sign in to your AfriMet account.",
 };
 
-export default function LoginPage() {
+interface LoginPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+function getSearchParam(
+  params: Record<string, string | string[] | undefined>,
+  key: string
+): string | undefined {
+  const value = params[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const rawParams = await searchParams;
+  const redirectTo = getSafeRedirectPath(getSearchParam(rawParams, "redirect"));
+
   return (
     <PageContainer className="flex max-w-md flex-col justify-center py-6 sm:py-8">
       <div className="text-center">
@@ -20,7 +36,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <LoginForm />
+      <LoginForm redirectTo={redirectTo} />
 
       <p className="mt-5 text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
