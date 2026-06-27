@@ -42,6 +42,10 @@ export function mapAuthError(error: AuthError | Error | null): string {
     return AUTH_ERROR_MESSAGES.weak_password;
   }
 
+  if (message.includes("invalid api key")) {
+    return "Authentication configuration error. Please contact support.";
+  }
+
   if (
     message.includes("fetch") ||
     message.includes("network") ||

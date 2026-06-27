@@ -124,6 +124,12 @@ export async function forgotPasswordAction(
   );
 
   if (error) {
+    console.error("[forgotPasswordAction] resetPasswordForEmail failed:", {
+      message: error.message,
+      code: "code" in error ? error.code : undefined,
+      status: "status" in error ? error.status : undefined,
+      name: error.name,
+    });
     return { error: mapAuthError(error) };
   }
 
